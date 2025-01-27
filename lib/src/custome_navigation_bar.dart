@@ -329,7 +329,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
   @override
   Widget build(BuildContext context) {
     final double additionalBottomPadding =
-        math.max(MediaQuery.of(context).padding.bottom, 0.0);
+        math.max(MediaQuery.of(context).padding.bottom, 0.0)+13;
 
     final height = DefaultCustomNavigationBarStyle.defaultHeight +
         (widget.isFloating ? 0.0 : additionalBottomPadding);
@@ -351,7 +351,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
     final bar = Container(
       decoration: widget.image != null
           ? BoxDecoration(
-              image: DecorationImage(image: widget.image!, fit: BoxFit.fill,opacity: 0.2),
+              image: DecorationImage(image: widget.image!, fit: BoxFit.fill,opacity: 0.1),
               borderRadius: BorderRadius.all(
                 widget.borderRadius,
               ),
@@ -371,25 +371,18 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
             children: <Widget>[
               for (var i = 0; i < widget.items.length; i++)
                 Expanded(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      if (i==2) CircleAvatar(backgroundColor: Colors.black.withOpacity(0.1),maxRadius: 30,) else SizedBox.shrink(),
-
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          widget.onTap!(i);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildIcon(i),
-                            _buildLabel(i),
-                          ],
-                        ),
-                      ),
-                    ],
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      widget.onTap!(i);
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildIcon(i),
+                        _buildLabel(i),
+                      ],
+                    ),
                   ),
                 ),
             ],
@@ -413,8 +406,8 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
           ),
           child: BackdropFilter(
             filter: ImageFilter.blur(
-              sigmaX: 5.0,
-              sigmaY: 10.0,
+              sigmaX: 25.0,
+              sigmaY: 20.0,
             ),
             child: Opacity(
               opacity: 0.6,
