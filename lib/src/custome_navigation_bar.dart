@@ -246,9 +246,6 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
     Tween<double>(begin: 0.0, end: 1.0)
         .animate(_scaleAnimation)
         .addListener(() {
-      setState(() {
-        _sizes[index] = _scaleAnimation.value * widget.scaleFactor;
-      });
     });
     _scaleController!.forward();
   }
@@ -303,25 +300,14 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
     return SizedBox(
       height: widget.iconSize,
       width: widget.iconSize,
-      child: CustomPaint(
-        painter: BeaconPainter(
-          color: strokeColor,
-          beaconRadius: _radiuses[index],
-          maxRadius: _maxRadius,
-          offset: Offset(
-            widget.iconSize / 2,
-            widget.iconSize / 2,
-          ),
-        ),
-        child: _CustomNavigationBarTile(
-          iconSize: widget.iconSize,
-          scale: _sizes[index],
-          selected: index == widget.currentIndex,
-          item: widget.items[index],
-          selectedColor: selectedColor,
-          unSelectedColor: unSelectedColor,
-          iconPadding: _itemPadding,
-        ),
+      child: _CustomNavigationBarTile(
+        iconSize: widget.iconSize,
+        scale: _sizes[index],
+        selected: index == widget.currentIndex,
+        item: widget.items[index],
+        selectedColor: selectedColor,
+        unSelectedColor: unSelectedColor,
+        iconPadding: _itemPadding,
       ),
     );
   }
@@ -345,8 +331,6 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
           (widget.items.length * 2);
     }
 
-    final CustomNavigationBarThemeData themeData = _calculateThemeData();
-    final Color? backgroundColor = themeData.backgroundColor;
 
     final bar = Container(
       decoration: widget.image != null
@@ -357,36 +341,29 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
               ),
             )
           : null,
-      child: Material(
-        color: backgroundColor,
-        elevation: widget.elevation,
-        borderRadius: BorderRadius.all(
-          widget.borderRadius,
-        ),
-        child: SizedBox(
-          height: height+20,
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              for (var i = 0; i < widget.items.length; i++)
-                Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      widget.onTap!(i);
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildIcon(i),
-                        _buildLabel(i),
-                      ],
-                    ),
+      child: SizedBox(
+        height: height+20,
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            for (var i = 0; i < widget.items.length; i++)
+              Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    widget.onTap!(i);
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildIcon(i),
+                      _buildLabel(i),
+                    ],
                   ),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );
@@ -409,10 +386,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar>
               sigmaX: 25.0,
               sigmaY: 20.0,
             ),
-            child: Opacity(
-              opacity: 0.6,
-              child: bar,
-            ),
+            child: bar,
           ),
         ),
       );
